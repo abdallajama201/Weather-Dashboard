@@ -1,0 +1,11 @@
+ /* Temporary styling */
+* {
+    margin: 0;
+    padding: 0;
+    /* border: black 1px solid; */
+    /* min-height: 100px; */
+}
+
+input {
+    width: 100%;
+}
