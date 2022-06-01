@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page styled exclusively with bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
-    <link rel="stylesheet" href="./assets/css/styles.css"/>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
     <title>Weather Dashboard</title>
 </head>
 <body>
-    <header>
+    <header class="row justify-content-center text-white bg-primary mb-3">
         <h1>Weather Dashboard</h1>
     </header>
     <div class="row">
-        <aside class="col-12 col-lg-3">
+        <aside class="col-12 col-lg-3 card text-white bg-secondary mb-3" style="height: 600px">
             <section>
-                <form id="search-form">
+                <form id="search-form" class="row justify-content-center">
                     <h2>Search for a City:</h2>
                     <input type="search" placeholder="eg. Toronto">
-                    <button>Search</button>
+                    <button class="btn btn-primary">Search</button>
                 </form>
             </section>
-            <section id="prev-search"></section>
+            <section id="prev-search" class="row justify-content-center"></section>
         </aside>
         <main class="col-12 col-lg-9">
             <section id="current-date">
@@ -39,35 +39,35 @@
             <h3 id="forecast-title" style="visibility:hidden">5 Day Forecast:</h3>
             <section id="5-day-forecast" class="row justify-content-center">
                 <section class="col-12 col-md-6 col-lg-2">
-                    <h4></h4>
+                    <h5></h5>
                     <img>
                     <p></p>
                     <p></p>
                     <p></p>
                 </section>
                 <section class="col-12 col-md-6 col-lg-2">
-                    <h4></h4>
+                    <h5></h5>
                     <img>
                     <p></p>
                     <p></p>
                     <p></p>
                 </section>
                 <section class="col-12 col-md-6 col-lg-2">
-                    <h4></h4>
+                    <h5></h5>
                     <img>
                     <p></p>
                     <p></p>
                     <p></p>
                 </section>
                 <section class="col-12 col-md-6 col-lg-2">
-                    <h4></h4>
+                    <h5></h5>
                     <img>
                     <p></p>
                     <p></p>
                     <p></p>
                 </section>
                 <section class="col-12 col-md-6 col-lg-2">
-                    <h4></h4>
+                    <h5></h5>
                     <img>
                     <p></p>
                     <p></p>

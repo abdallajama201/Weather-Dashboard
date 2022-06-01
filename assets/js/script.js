@@ -8,20 +8,53 @@ let cityList = []
 let isClearing = false;
 let clearMessageCode;
 
-
 // Set the day
 let today = dayjs();
 
 function init() {
-    searchform.children("button").on("click", getData)
+    searchform.children("button").on("click", getData);
+    initiateStorage();
+    initiatePrev();
 }
 
-// Takes the value in the input element
-// Uses that string to access the API
+// Checks if local storage has any items and puts them in an array
+function initiateStorage() {
+    if(localStorage.getItem("cityList") !== null) {
+        cityList = JSON.parse(localStorage.getItem("cityList"));
+    }
+    localStorage.setItem("cityList", JSON.stringify(cityList));
+}
+
+// Creates buttons of prev searches if there were any
+function initiatePrev() {
+    let i = 0;
+    while(i < cityList.length && i < 10) {
+        let prev = $("<button>");
+        prev.text(`${cityList[i]}`);
+        prev.attr("class", "col-8 my-1 btn btn-dark");
+        prevSearch.append(prev);
+        i++;
+    }
+    prevSearch.children("button").on("click", getData)
+}
+
+// Takes the value in the input element or the prev searches
+// Uses that string to access the API for geocoding
+// Passes geocode into API for weather
 function getData(event) {
     event.preventDefault();
-    let city = searchform.children("input").val();
+    let city = "";
+    if(event.target.textContent === "Search") {
+        city = searchform.children("input").val();
+        searchform.children("input").val("");
+    } else {
+        city = event.target.textContent;
+    }
     city = city.toUpperCase();
+    if(!city) {
+        invalidInput();
+        return;
+    }
 
     let requestUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=5911de58d825147b5fa891cd55dfb5c0&units=metric`;
     fetch(requestUrl)
@@ -79,7 +112,6 @@ function clearAnswer() {
     }
 }
 
-
 // Displays the current weather
 function displayWeather(data, city) {
     let title = weather.children().eq(0).children("h2")
@@ -89,12 +121,24 @@ function displayWeather(data, city) {
     let humidity = weather.children().eq(3);
     let uvIndex = weather.children().eq(4);
     
+    weather.addClass("card bg-light mb-3");
+
     title.text(`${city} ${today.format("MM/DD/YYYY")}`);
     conditions.attr("src",`https://openweathermap.org/img/w/${data.current.weather[0].icon}.png`);
     temp.text(`Temp: ${data.current.temp}°C`);
     wind.text(`Wind: ${Math.round((data.current.wind_speed * 3.6))} kph`);
     humidity.text(`Humidty: ${data.current.humidity}%`);
     uvIndex.text(`UV Index: ${data.current.uvi}`);
+
+    let uv = data.current.uvi;
+    if(uv < 4) {
+        uvIndex.css("background-color", "green");
+    }else if(uv < 7) {
+        uvIndex.css("background-color", "yellow");
+    }else {
+        uvIndex.css("background-color", "red");
+    }
+    
 }
 
 // Displays the 5 day forecast
@@ -107,8 +151,9 @@ function displayForecast(data) {
         let wind = forecast.children().eq(i).children().eq(3);
         let humidity = forecast.children().eq(i).children().eq(4);
 
+        forecast.children().eq(i).addClass("card text-white bg-dark mb-3 mx-1")
+
         let index = i + 1;
-        
         date.text(today.add((i + 1), "d").format("MM/DD/YYYY"));
         conditions.attr("src",`https://openweathermap.org/img/w/${data.daily[index].weather[0].icon}.png`);
         temp.text(`Temp: ${data.daily[index].temp.day}°C`);
@@ -117,10 +162,43 @@ function displayForecast(data) {
     }
 }
 
+// Chacks if there are any cities saved locally
+// If there are is populates them in an array
+// Checks if the city is already recorded and exits if yes
+// Adds the city to the array and updates local storage
 function saveCity(city) {
+    if(localStorage.getItem("cityList") !== null) {
+        cityList = JSON.parse(localStorage.getItem("cityList"));
+    }
+    while(cityList.length > 9) {
+        cityList.pop();
+    }
+    for(let i = 0; i < cityList.length; i++) {
+        if(city === cityList[i]) {
+            return
+        }
+    }
     cityList.reverse();
     cityList.push(city);
     cityList.reverse();
+    
+    localStorage.setItem("cityList", JSON.stringify(cityList));
+    updatePrev();
+}
+
+// Creates a new button if less than ten buttons
+// Otherwise it renames the buttons
+function updatePrev() {
+    if(cityList.length < 10) {
+        let prev = $("<button>");
+        prev.text(`${cityList[0]}`);
+        prev.attr("class", "col-8 my-1 btn btn-dark");
+        prevSearch.append(prev);
+    } else {
+        for(let i = 0; i < 10; i++) {
+            prevSearch.children().eq(i).text(cityList[i]);
+        }
+    }    
 }
 
 init();
