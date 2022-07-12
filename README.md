@@ -8,7 +8,7 @@ A User can look up the weather for multiple cities and get the current condition
  
 ## Usage
  
-The website is live on the open web and can be accessed at https://abdallajama201.github.io/06-Weather-Dashboard/
+The website is live on the open web and can be accessed at https://abdallajama201.github.io/Weather-Dashboard/
 
 When a user opens the webpage for the first time they are presented with a search field they can input a city name in. When the user presses submit or the enter key the page is populated with the weather conditions and forecast. The search is also saved under the input field.
 
